@@ -44,7 +44,8 @@ public class AppUserService implements UserDetailsService {
             throw new IllegalStateException("email already taken");
         }
 
-        String encodedPassword = bCryptPasswordEncoder
+        String encodedPassword =
+                bCryptPasswordEncoder
                 .encode(appUser.getPassword());
 
         appUser.setPassword(encodedPassword);
