@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -18,6 +19,7 @@ public class TicketService {
     private EmailService emailService;
     @Autowired
     TicketRepository ticketRepository;
+
 
     public TicketDto getTicketById(Long ticketnum) {
         TicketDto dto = new TicketDto();
@@ -70,5 +72,29 @@ public class TicketService {
     }
 
 
+    public String editTicket(Long ticketnum,TicketDto dto) throws IllegalArgumentException{
+        boolean ticketPresent = ticketRepository.existsById(ticketnum);
+        if(ticketPresent){
+            Ticket ticketUpdate=ticketRepository.findByTicketNumber(ticketnum);
+            ticketUpdate.setTicketNumber(ticketnum);
+            ticketUpdate.setDescription(dto.getDescription());
+            ticketUpdate.setStatus(dto.getStatus());
+            ticketRepository.save(ticketUpdate);
 
+          return "ticket updated successfully";
+        }else {
+            throw new NullPointerException("Ticket not found");
+        }
+
+
+    }
+
+    public List<Ticket> getAllTickets() {
+        return ticketRepository.findAll();
+    }
+
+    public TicketDto getTicketsByStatus() {
+
+        return null;
+    }
 }
