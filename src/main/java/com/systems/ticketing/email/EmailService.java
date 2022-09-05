@@ -53,4 +53,21 @@ public class EmailService implements EmailSender{
             throw new IllegalStateException("failed to send email");
         }
     }
+
+   public void sendClosedTicket(String message,String recipient){
+
+       try{
+           MimeMessage mimeMessage = mailSender.createMimeMessage();
+           MimeMessageHelper helper =
+                   new MimeMessageHelper(mimeMessage, "utf-8");
+           helper.setText(message, true);
+           helper.setTo(recipient);
+           helper.setSubject("Ticket closure");
+           helper.setFrom("kenac.co.zw");
+           mailSender.send(mimeMessage);
+       } catch (MessagingException e) {
+           LOGGER.error("failed to send email", e);
+           throw new IllegalStateException("failed to send email");
+       }
+   }
 }

@@ -1,15 +1,15 @@
 package com.systems.ticketing.ticket;
 
+import lombok.ToString;
+
+
 public enum Status {
 
-  OPEN("open"),
-  INPROGRESS("inprogress"),
-  HOLD("hold"),
-  CLOSED("closed");
+  OPEN,
+  INPROGRESS,
+  HOLD,
+  CLOSED;
 
-
-  Status(String name){
-  }
 }
 
 

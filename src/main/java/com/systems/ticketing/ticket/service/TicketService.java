@@ -1,6 +1,7 @@
 package com.systems.ticketing.ticket.service;
 
 import com.systems.ticketing.email.EmailService;
+import com.systems.ticketing.ticket.Status;
 import com.systems.ticketing.ticket.dto.TicketDto;
 import com.systems.ticketing.ticket.entity.Ticket;
 import com.systems.ticketing.ticket.repository.TicketRepository;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 @Service
 @Slf4j
@@ -73,12 +73,18 @@ public class TicketService {
 
 
     public String editTicket(Long ticketnum,TicketDto dto) throws IllegalArgumentException{
+
         boolean ticketPresent = ticketRepository.existsById(ticketnum);
         if(ticketPresent){
             Ticket ticketUpdate=ticketRepository.findByTicketNumber(ticketnum);
             ticketUpdate.setTicketNumber(ticketnum);
             ticketUpdate.setDescription(dto.getDescription());
             ticketUpdate.setStatus(dto.getStatus());
+            String message = "Dear Customer , your ticket "+ ticketUpdate.getTicketNumber()+" has been closed";
+            if (dto.getStatus().toString().equals(Status.OPEN.toString())){
+                log.info("testing if riri open");
+                emailService.sendClosedTicket( message, ticketUpdate.getReceipientEmail());
+            }
             ticketRepository.save(ticketUpdate);
 
           return "ticket updated successfully";
@@ -93,8 +99,8 @@ public class TicketService {
         return ticketRepository.findAll();
     }
 
-    public TicketDto getTicketsByStatus() {
+    public List<Ticket> getTicketsByStatus(Status status) {
 
-        return null;
+        return ticketRepository.findAllByStatus(status);
     }
 }

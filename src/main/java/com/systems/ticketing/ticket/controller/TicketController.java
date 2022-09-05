@@ -1,5 +1,6 @@
 package com.systems.ticketing.ticket.controller;
 
+import com.systems.ticketing.ticket.Status;
 import com.systems.ticketing.ticket.dto.TicketDto;
 import com.systems.ticketing.ticket.entity.Ticket;
 import com.systems.ticketing.ticket.service.TicketService;
@@ -8,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "ticket/api/v1")
@@ -38,8 +40,8 @@ public class TicketController {
 
     }
     @GetMapping("viewTicketByStatus")
-    public TicketDto viewTicketByStatus(@RequestParam String status){
-        return ticketService.getTicketsByStatus();
+    public List<Ticket> viewTicketByStatus(@RequestParam ("status")String status){
+        return ticketService.getTicketsByStatus(Status.valueOf(status));
     }
 
 }
