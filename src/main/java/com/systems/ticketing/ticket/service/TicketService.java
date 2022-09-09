@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,13 +48,15 @@ public class TicketService {
     public String saveticket(TicketDto ticketDto) {
 
         Ticket ticket = new Ticket();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+         LocalDateTime dateTime = LocalDateTime.now();
 
         ticket.setAssignee(ticketDto.getAssignee());
         ticket.setCustomerName(ticketDto.getCustomerName());
         ticket.setDescription(ticketDto.getDescription());
         ticket.setPriority(ticketDto.getPriority());
         ticket.setReceipientEmail(ticketDto.getReceipientEmail());
-        ticket.setDateCreated(ticketDto.getDateCreated());
+        ticket.setDateCreated(dateTime);
         ticket.setClosed(false);
         ticketRepository.save(ticket);
 
@@ -73,7 +77,7 @@ public class TicketService {
 
 
     public String editTicket(Long ticketnum,TicketDto dto) throws IllegalArgumentException{
-
+        LocalDateTime dateclosed = LocalDateTime.now();
         boolean ticketPresent = ticketRepository.existsById(ticketnum);
         if(ticketPresent){
             Ticket ticketUpdate=ticketRepository.findByTicketNumber(ticketnum);
@@ -81,8 +85,10 @@ public class TicketService {
             ticketUpdate.setDescription(dto.getDescription());
             ticketUpdate.setStatus(dto.getStatus());
             String message = "Dear Customer , your ticket "+ ticketUpdate.getTicketNumber()+" has been closed";
-            if (dto.getStatus().toString().equals(Status.OPEN.toString())){
+            if (dto.getStatus().toString().equals(Status.CLOSED.toString())){
                 log.info("testing if riri open");
+                ticketUpdate.setClosed(true);
+                ticketUpdate.setDateClosed(dateclosed);
                 emailService.sendClosedTicket( message, ticketUpdate.getReceipientEmail());
             }
             ticketRepository.save(ticketUpdate);

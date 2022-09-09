@@ -1,7 +1,6 @@
 package com.systems.ticketing.registration;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,22 +10,22 @@ public class RegistrationController {
 
     private final RegistrationService registrationService;
 
-    @GetMapping("/form")
-    public String showRegForm(){
+//    @GetMapping("/form")
+//    public String showRegForm(){
+//
+//        return "signup";
+//    }
 
-        return "signup";
-    }
 
 
+//    @PostMapping
+//    public String register(@RequestBody RegistrationRequest request) {
+//        return registrationService.register(request);
+//    }
 
-    @PostMapping
-    public String register(@RequestBody RegistrationRequest request) {
-        return registrationService.register(request);
-    }
-
-    @GetMapping(path = "confirm")
-    public String confirm(@RequestParam("token") String token) {
-        return registrationService.confirmToken(token);
-    }
+//    @GetMapping(path = "confirm")
+//    public String confirm(@RequestParam("token") String token) {
+//        return registrationService.confirmToken(token);
+//    }
 
 }

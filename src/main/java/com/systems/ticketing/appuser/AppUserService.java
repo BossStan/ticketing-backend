@@ -3,6 +3,7 @@ package com.systems.ticketing.appuser;
 import com.systems.ticketing.registration.token.ConfirmationToken;
 import com.systems.ticketing.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class AppUserService implements UserDetailsService {
 
@@ -31,6 +33,20 @@ public class AppUserService implements UserDetailsService {
                         new UsernameNotFoundException(
                                 String.format(USER_NOT_FOUND_MSG, email)));
     }
+
+    public String authenticateUser(String email, String password){
+//       String encodedpass = bCryptPasswordEncoder.encode(password);
+        AppUser user = appUserRepository.findAppUsersByEmailAndPassword(email,password);
+
+        log.info("........................... {}",user.toString());
+
+        if(user==null){
+            throw  new UsernameNotFoundException("incorrect or bad credentials");
+        }
+
+        return "login success";
+    }
+
 
     public String signUpUser(AppUser appUser) {
         boolean userExists = appUserRepository
