@@ -27,8 +27,8 @@ public class LoginController {
         String email= dto.getEmail();
         String pass= dto.getPassword();
         log.info("....................{},{} ",email,pass);
-                appUserService.authenticateUser(email,pass);
-        return  ResponseEntity.ok("login sucessfull");
+//                appUserService.authenticateUser(email,pass);
+        return  ResponseEntity.ok(appUserService.authenticateUser(email,pass));
 
     }
 }

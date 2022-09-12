@@ -34,7 +34,7 @@ public class AppUserService implements UserDetailsService {
                                 String.format(USER_NOT_FOUND_MSG, email)));
     }
 
-    public String authenticateUser(String email, String password){
+    public AppUser authenticateUser(String email, String password){
 //       String encodedpass = bCryptPasswordEncoder.encode(password);
         AppUser user = appUserRepository.findAppUsersByEmailAndPassword(email,password);
 
@@ -44,7 +44,7 @@ public class AppUserService implements UserDetailsService {
             throw  new UsernameNotFoundException("incorrect or bad credentials");
         }
 
-        return "login success";
+        return user;
     }
 
 
