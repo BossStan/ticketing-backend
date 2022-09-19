@@ -5,6 +5,8 @@ import com.systems.ticketing.ticket.dto.TicketDto;
 import com.systems.ticketing.ticket.entity.Ticket;
 import com.systems.ticketing.ticket.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,33 +16,34 @@ import java.util.List;
 @RequestMapping(path = "ticket/api/v1")
 public class TicketController {
     @Autowired
-    private TicketService  ticketService;
+    private TicketService ticketService;
 
     @GetMapping("/tickets")
-    public List<Ticket>getalltickets(){
-        return ticketService.getAllTickets();
+    public ResponseEntity<?> getalltickets() {
+        return new ResponseEntity<>(ticketService.getAllTickets(), HttpStatus.OK);
     }
 
     @GetMapping("viewTicket")
-    public TicketDto viewTicketByNumber(@RequestParam Long ticketnum){
-        return ticketService.getTicketById(ticketnum);
+    public ResponseEntity<?> viewTicketByNumber(@RequestParam Long ticketnum) {
+        return new ResponseEntity<>(ticketService.getTicketById(ticketnum), HttpStatus.OK);
     }
 
     @PostMapping("addticket")
-    public String addNewTicket(@RequestBody TicketDto ticketDto){
-        return ticketService.saveticket(ticketDto);
+    public ResponseEntity<?> addNewTicket(@RequestBody TicketDto ticketDto) {
+        return new ResponseEntity<>(ticketService.saveticket(ticketDto), HttpStatus.CREATED);
     }
 
     @PutMapping("updateTicket/{id}")
 
-        public String editCustomer(@PathVariable("id") Long ticketnum, @RequestBody TicketDto ticketDto){
+    public ResponseEntity<?> editCustomer(@PathVariable("id") Long ticketnum, @RequestBody TicketDto ticketDto) {
 
-        return ticketService.editTicket(ticketnum,ticketDto);
+        return new ResponseEntity<>(ticketService.editTicket(ticketnum, ticketDto), HttpStatus.OK);
 
     }
+
     @GetMapping("viewTicketByStatus")
-    public List<Ticket> viewTicketByStatus(@RequestParam ("status")String status){
-        return ticketService.getTicketsByStatus(Status.valueOf(status));
+    public ResponseEntity<?> viewTicketByStatus(@RequestParam("status") String status) {
+        return new ResponseEntity<>(ticketService.getTicketsByStatus(Status.valueOf(status)), HttpStatus.OK);
     }
 
 }
